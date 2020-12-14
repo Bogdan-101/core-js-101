@@ -1,3 +1,4 @@
+/* eslint-disable prefer-spread */
 /* *********************************************************************************************
  *                                                                                             *
  * Please read the following tutorial before implementing tasks:                                *
@@ -69,11 +70,13 @@ function getPowerFunction(exponent) {
 function getPolynom(...numbers) {
   // eslint-disable-next-line func-names
   return function (x) {
-    numbers.reverse().reduce((sum, num, i) => {
-      let res = sum;
-      res += num * (x ** i);
-      return res;
-    }, 0);
+    let sum = 0;
+    // eslint-disable-next-line array-callback-return
+    numbers.reverse().map((elem, ind) => {
+      // eslint-disable-next-line no-restricted-properties
+      sum += elem * Math.pow(x, ind);
+    });
+    return sum;
   };
 }
 
@@ -92,8 +95,17 @@ function getPolynom(...numbers) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const calls = {};
+  return function () {
+    // eslint-disable-next-line prefer-rest-params
+    const key = JSON.stringify(arguments);
+    if (!(key in calls)) {
+      // eslint-disable-next-line prefer-rest-params
+      calls[key] = func.apply(null, arguments);
+    }
+    return calls[key];
+  };
 }
 
 
@@ -112,8 +124,12 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  for (let i = 0; i < attempts; i += 1) {
+    // eslint-disable-next-line no-continue
+    if (func() instanceof Error) continue;
+  }
+  return func();
 }
 
 
@@ -121,7 +137,7 @@ function retry(/* func, attempts */) {
  * Returns the logging wrapper for the specified method,
  * Logger has to log the start and end of calling the specified function.
  * Logger has to log the arguments of invoked function.
- * The fromat of output log is:
+ * The format of output log is:
  * <function name>(<arg1>, <arg2>,...,<argN>) starts
  * <function name>(<arg1>, <arg2>,...,<argN>) ends
  *
@@ -140,8 +156,12 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return function (...x) {
+    logFunc(`${func.name}(${x}) starts`);
+    logFunc(`${func.name}(${x}) ends`);
+    return func(x);
+  };
 }
 
 
@@ -180,8 +200,16 @@ function partialUsingArguments(/* fn, ...args1 */) {
  *   getId4() => 7
  *   getId10() => 11
  */
-function getIdGeneratorFunction(/* startFrom */) {
-  throw new Error('Not implemented');
+function getIdGeneratorFunction(startFrom) {
+  // eslint-disable-next-line func-names
+  return function () {
+    if (typeof this.num === 'undefined') {
+      this.num = startFrom;
+      return this.num;
+    }
+    // eslint-disable-next-line no-plusplus
+    return ++this.num;
+  };
 }
 
 
