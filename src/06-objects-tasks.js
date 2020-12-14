@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 /* ************************************************************************************************
  *                                                                                                *
- * Plese read the following tutorial before implementing tasks:                                   *
+ * Please read the following tutorial before implementing tasks:                                   *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object        *
  *                                                                                                *
@@ -8,7 +9,7 @@
 
 
 /**
- * Returns the rectagle object with width and height parameters and getArea() method
+ * Returns the rectangle object with width and height parameters and getArea() method
  *
  * @param {number} width
  * @param {number} height
@@ -20,8 +21,14 @@
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(/* width, height */) {
-  throw new Error('Not implemented');
+function Rectangle(width, height) {
+  this.width = width;
+  this.height = height;
+
+  // eslint-disable-next-line func-names
+  this.getArea = function () {
+    return this.width * this.height;
+  };
 }
 
 
@@ -35,8 +42,8 @@ function Rectangle(/* width, height */) {
  *    [1,2,3]   =>  '[1,2,3]'
  *    { width: 10, height : 20 } => '{"height":10,"width":20}'
  */
-function getJSON(/* obj */) {
-  throw new Error('Not implemented');
+function getJSON(obj) {
+  return JSON.stringify(obj);
 }
 
 
@@ -51,8 +58,11 @@ function getJSON(/* obj */) {
  *    const r = fromJSON(Circle.prototype, '{"radius":10}');
  *
  */
-function fromJSON(/* proto, json */) {
-  throw new Error('Not implemented');
+function fromJSON(proto, json) {
+  const obj = JSON.parse(json);
+  const values = Object.values(obj);
+
+  return new proto.constructor(...values);
 }
 
 
@@ -64,13 +74,13 @@ function fromJSON(/* proto, json */) {
  *
  *    element#id.class[attr]:pseudoClass::pseudoElement
  *              \----/\----/\----------/
- *              Can be several occurences
+ *              Can be several occurrences
  *
  * All types of selectors can be combined using the combinators ' ','+','~','>' .
  *
  * The task is to design a single class, independent classes or classes hierarchy
  * and implement the functionality to build the css selectors using the provided cssSelectorBuilder.
- * Each selector should have the stringify() method to output the string repsentation
+ * Each selector should have the stringify() method to output the string representation
  * according to css specification.
  *
  * Provided cssSelectorBuilder should be used as facade only to create your own classes,
@@ -112,31 +122,69 @@ function fromJSON(/* proto, json */) {
 
 const cssSelectorBuilder = {
   element(/* value */) {
+  //   if (!cssSelectorBuilder.el) {
+  //     cssSelectorBuilder.el = [`${value}`];
+  //   } else {
+  //     cssSelectorBuilder.el.push(`${value}`);
+  //   }
+  //   return cssSelectorBuilder;
     throw new Error('Not implemented');
   },
 
   id(/* value */) {
+    // if (!cssSelectorBuilder.el) {
+    //   cssSelectorBuilder.el = [`#${value}`];
+    //   return cssSelectorBuilder;
+    // }
+    // if (cssSelectorBuilder.el && cssSelectorBuilder.el.length > 1)
+    // cssSelectorBuilder.el[1] += `#${value}`;
+    // cssSelectorBuilder.el[0] += `#${value}`;
+    // return cssSelectorBuilder;
     throw new Error('Not implemented');
   },
 
   class(/* value */) {
+    // if (typeof cssSelectorBuilder.el === 'undefined') cssSelectorBuilder.el = `.${value}`;
+    // else cssSelectorBuilder.el += `.${value}`;
+    // return cssSelectorBuilder;
     throw new Error('Not implemented');
   },
 
   attr(/* value */) {
+    // if (cssSelectorBuilder.el && cssSelectorBuilder.el.length > 1)
+    // cssSelectorBuilder.el[1] += `[${value}]`;
+    // if (!cssSelectorBuilder.el) {
+    //   cssSelectorBuilder.el = [`${value}`];
+    //   return cssSelectorBuilder;
+    // }
+    // cssSelectorBuilder.el[0] += `[${value}]`;
+    // console.log(cssSelectorBuilder.el[0]);
+    // console.log(cssSelectorBuilder.el[1]);
+    // return cssSelectorBuilder;
     throw new Error('Not implemented');
   },
 
   pseudoClass(/* value */) {
+    // if (cssSelectorBuilder.el.length > 1) cssSelectorBuilder.el[1] += `:${value}`;
+    // cssSelectorBuilder.el[0] += `:${value}`;
+    // return cssSelectorBuilder;
     throw new Error('Not implemented');
   },
 
   pseudoElement(/* value */) {
+    // if (typeof cssSelectorBuilder.el === 'undefined') cssSelectorBuilder.el = `::${value}`;
+    // else cssSelectorBuilder.el += `::${value}`;
+    // return cssSelectorBuilder;
     throw new Error('Not implemented');
   },
 
   combine(/* selector1, combinator, selector2 */) {
+    // return `${selector1.el[0]} ${combinator} ${selector2.el[1]}`;
     throw new Error('Not implemented');
+  },
+
+  stringify() {
+    return cssSelectorBuilder.el.reduce((acum, curr) => acum + curr, '');
   },
 };
 

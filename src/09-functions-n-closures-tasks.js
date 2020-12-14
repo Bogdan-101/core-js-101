@@ -1,6 +1,6 @@
 /* *********************************************************************************************
  *                                                                                             *
- * Plese read the following tutorial before implementing tasks:                                *
+ * Please read the following tutorial before implementing tasks:                                *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions                     *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function   *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments       *
@@ -23,8 +23,8 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(...functions) {
+  return (args) => functions.reduceRight((arg, fn) => fn(arg), args);
 }
 
 
@@ -44,8 +44,12 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  // eslint-disable-next-line func-names
+  return function (elem) {
+    // eslint-disable-next-line no-restricted-properties
+    return Math.pow(elem, exponent);
+  };
 }
 
 
@@ -62,8 +66,15 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...numbers) {
+  // eslint-disable-next-line func-names
+  return function (x) {
+    numbers.reverse().reduce((sum, num, i) => {
+      let res = sum;
+      res += num * (x ** i);
+      return res;
+    }, 0);
+  };
 }
 
 
